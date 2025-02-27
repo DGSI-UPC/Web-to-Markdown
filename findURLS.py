@@ -25,6 +25,6 @@ def get_all_links(base_url):
         return []
 
 # Example usage
-base_url = 'https://example.com'  # Replace with your target base URL
+base_url = 'https://www.fib.upc.edu/ca'  # Replace with your target base URL
 urls = get_all_links(base_url)
 print(urls)
