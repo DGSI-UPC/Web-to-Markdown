@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, BackgroundTasks
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -13,6 +13,8 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 class URLItem(BaseModel):
     url: str
+
+tasks = {}
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
