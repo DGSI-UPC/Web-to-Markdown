@@ -133,6 +133,10 @@ def crawl(start_url, output_dir="markdown_output"):
         
         time.sleep(1)  # Be polite to the server
 
+def process_url(url, task_id):
+    output_dir = f"output/{task_id}"
+    crawl(url, output_dir=output_dir)
+
 if __name__ == "__main__":
     import sys
     if len(sys.argv) != 2:
