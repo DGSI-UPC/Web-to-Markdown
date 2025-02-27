@@ -2,3 +2,8 @@ fastapi
 uvicorn
 requests
 pydantic
+requests
+trafilatura
+beautifulsoup4
+lxml_html_clean
+html2text
