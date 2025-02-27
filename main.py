@@ -3,7 +3,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import requests
-import uuid
+from script import crawl
+import shutil
+from fastapi.responses import FileResponse
 
 app = FastAPI()
 
@@ -20,16 +22,11 @@ async def read_root():
         return HTMLResponse(content=f.read(), status_code=200)
 
 @app.post("/submit-url/")
-async def submit_url(url_item: URLItem, background_tasks: BackgroundTasks):
-    task_id = str(uuid.uuid4())
-    tasks[task_id] = {"status": "processing", "content": ""}
-    background_tasks.add_task(fetch_url_content, url_item.url, task_id)
-    return {"task_id": task_id}
+async def submit_url(url_item: URLItem):
+    print(url_item.url)
+    crawl(url_item.url)
+    # Compress the markdown_output folder into a zip file
+    shutil.make_archive("markdown_output", "zip", "markdown_output")
 
-@app.get("/check-status/{task_id}")
-async def check_status(task_id: str):
-    return tasks.get(task_id, {"status": "not found"})
-
-async def fetch_url_content(url: str, task_id: str):
-    response = requests.get(url)
-    tasks[task_id] = {"status": "completed", "content": response.text}
+    # Return the zip file as a response
+    return FileResponse("markdown_output.zip", media_type="application/zip", filename="markdown_output.zip")
