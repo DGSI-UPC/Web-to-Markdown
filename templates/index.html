@@ -29,7 +29,6 @@
                 body: JSON.stringify({ url: url })
             });
             const data = await response.json();
-            document.getElementById('spinner').style.display = 'none';
             checkResponse(data.task_id);
         });
 
@@ -38,6 +37,10 @@
                 const response = await fetch(`/check-status/${task_id}`);
                 const data = await response.json();
                 if (data.status === "completed") {
+                    document.getElementById('spinner').style.display = 'none';
+                    clearInterval(interval);
+                    window.location.href = data.content;  // Automatically download the zip file
+                } else if (data.status === "failed") {
                     document.getElementById('result').innerText = data.content;
                     document.getElementById('spinner').style.display = 'none';
                     clearInterval(interval);
