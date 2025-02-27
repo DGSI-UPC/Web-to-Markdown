@@ -14,12 +14,13 @@
             <input type="text" id="url-input" name="url" required>
             <button type="submit">Submit</button>
         </form>
-        <div id="result"></div>
+        <div id="spinner" class="spinner" style="display: none;"></div>
     </div>
     <script>
         document.getElementById('url-form').addEventListener('submit', async function(event) {
             event.preventDefault();
             const url = document.getElementById('url-input').value;
+            document.getElementById('spinner').style.display = 'inline-block';
             const response = await fetch('/submit-url/', {
                 method: 'POST',
                 headers: {
@@ -28,8 +29,21 @@
                 body: JSON.stringify({ url: url })
             });
             const data = await response.json();
-            document.getElementById('result').innerText = data.content;
+            document.getElementById('spinner').style.display = 'none';
+            checkResponse(data.task_id);
         });
+
+        async function checkResponse(task_id) {
+            const interval = setInterval(async () => {
+                const response = await fetch(`/check-status/${task_id}`);
+                const data = await response.json();
+                if (data.status === "completed") {
+                    document.getElementById('result').innerText = data.content;
+                    document.getElementById('spinner').style.display = 'none';
+                    clearInterval(interval);
+                }
+            }, 2000);
+        }
     </script>
 </body>
 </html>
