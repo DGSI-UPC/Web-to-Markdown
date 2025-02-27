@@ -3,6 +3,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import requests
+from script import crawl
+import shutil
+from fastapi.responses import FileResponse
 
 app = FastAPI()
 
@@ -18,5 +21,10 @@ async def read_root():
 
 @app.post("/submit-url/")
 async def submit_url(url_item: URLItem):
-    response = requests.get(url_item.url)
-    return {"content": response.text}
+    print(url_item.url)
+    crawl(url_item.url)
+    # Compress the markdown_output folder into a zip file
+    shutil.make_archive("markdown_output", "zip", "markdown_output")
+
+    # Return the zip file as a response
+    return FileResponse("markdown_output.zip", media_type="application/zip", filename="markdown_output.zip")
