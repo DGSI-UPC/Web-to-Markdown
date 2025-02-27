@@ -12,7 +12,7 @@ To extract this information we get the HTML using the library trafilatura and pa
 - **Clear API usage:** the name of the endpoints clearly reflect their usage to easily make use of it.
 
 ## Requirements
-1. Python: Python 3.7 or higher is recommended. Check your version:
+1. Python: Python 3.11 or higher is recommended. Check your version:
     ```bash
     python --version  # or python3 --version
     ```
@@ -96,3 +96,28 @@ This API provides two endpoints for submitting the URL entered and checking the 
                     "detail": "Error message describing the problem."
                 }
                 ```
+
+## Docker Deployment
+
+### Build the Docker Image
+To build the Docker image, run the following command in the project directory:
+```bash
+docker build -t web-to-markdown .
+```
+
+### Run the Docker Container
+To run the Docker container, use the following command:
+```bash
+docker run -p 8000:8000 web-to-markdown
+```
+
+### Using Docker Compose
+Alternatively, you can use Docker Compose to build and run the application. Run the following command in the project directory:
+```bash
+docker-compose up --build
+```
+
+### Access the Application
+Once the container is running, you can access the application in your browser:
+- **Locally:** `http://localhost:8000`
+- **From another device:** `http://<your_server_ip>:8000`
